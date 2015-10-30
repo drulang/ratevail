@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="row featurette">
+    <div class="col-md-7">
+        <h1 class="featurette-heading">Contact Us  <span class="text-muted">We'd love to hear from you</span></h1>
+        <hr>
+        {% if insert_success or insert_failure %}
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                {% if insert_success %}
+                <div class="alert alert-success">
+                    <b>Awesome!</b> We got your feedback and if applicable we'll get back to you soon.
+                </div>
+                {% elif insert_failure %}
+                <div class="alert alert-danger">
+                    <b>Rut roh.</b> Something went terribly wrong. We've received an alert and if not already, will be looking into it.  Please try again in a little bit.
+                    <hr>In the meantime go check out Vail's great <a href="/venues/restaurant">restaurants!</a>
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1">
+                <form role="form" action="/contact" method="POST">
+                    <div class="form-group {% if userEmail_errmsg %}has-error{% endif %}">
+                        <label class="control-label" for="userInputEmail">Email Address</label>
+                        <input name="userEmail" type="email" class="form-control" id="userInputEmail" placeholder="Enter Email" {% if userEmail %}value="{{userEmail}}"{% endif %}>
+                        {% if userEmail_errmsg %}
+                        <span class="help-block">{{ userEmail_errmsg }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group {% if feedbacktypcd_errmsg %}has-error{% endif %}">
+                        <label class="control-label" for="feedbackType">Feedback Type</label>
+                        <select name="feedbacktypcd" class="form-control">
+                            {% for type in feedback_types %}
+                            <option value="{{ type['feedbacktypcd'] }}" {% if feedbacktypcd and feedbacktypcd == type['feedbacktypcd'] %}selected{% endif %}>{{ type['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if feedbacktypcd_errmsg %}
+                        <span class="help-block">{{ feedbacktypcd_errmsg }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group {% if userFeedbackText_errmsg %}has-error{% endif %}">
+                        <label class="control-label" for="userFeedback">Feedback</label>
+                        <textarea id="userFeedback" name="userFeedbackText" class="form-control" rows="5">{% if userFeedbackText %}{{ userFeedbackText }}{% endif %}</textarea>        
+                        {% if userFeedbackText_errmsg %}
+                        <span class="help-block">{{ userFeedbackText_errmsg }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <b>Direct Contact</b>
+                <ul>
+                    <li>admin@ratevail.com</li>
+                    <li>webmaster@ratevail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <img class="featurette-image img-responsive img-thumbnail" height="500" width="500" src="/static/img/about/snowy_trees.jpg" >
+    </div>
+</div>
+{% endblock %}
+

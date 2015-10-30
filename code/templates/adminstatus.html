@@ -1,0 +1,73 @@
+{% extends "adminbase.html" %}
+{% block title %}VailAdmin - Status{% endblock %}
+
+{% block content %}
+{% if session['loggedin'] %} 
+<div class="row" style="margin-top:10px;">
+    <div class="col-md-12">
+        <b>Total User Ratings:</b> {{ total_userratings }}
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <b>Laatest Comments</b>
+        {% if latest_comments %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Create Date</th>
+                    <th>Like Cnt</th>
+                    <th>Dislike Cnt</th>
+                    <th>Text</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in latest_comments %}
+                <tr>
+                    <td>{{ c['commentid'] }}</td>
+                    <td style="width:100px">{{ c['createdate'] }}</td>
+                    <td>{{ c['likecount'] }}</td>
+                    <td>{{ c['dislikecount'] }}</td>
+                    <td>{{ c['text'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <h4>Feedback</h4>        
+        {% if feedback %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in feedback %}
+                <tr>
+                    <td>{{ f['feedbackid'] }}</td>
+                    <td>{{ f['feedbackstatustypcd'] }}</td>
+                    <td>{{ f['feedbacktypname'] }}</td>
+                    <td>{{ f['createdate'] }}</td>
+                    <td>{{ f['message'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+

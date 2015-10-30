@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Make the best of your Vail vacation{% endblock %}
+
+{% block sitedesc %} RateVail is a central hub for exploring and traveling Vail. See fellow traveller's feedback and provide your own.{% endblock %}
+
+{% block header%}
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    </ol>
+
+    <!-- Wrapper for slider -->
+    <div class="carousel-inner carousel-index">
+        <div class="item active">
+            <img style="height:431px;width:100%;" src="/static/img/MTN1.jpg" alt="RateVail Mountain One">
+            <div class="carousel-caption-inverse" style="width:680px;left:35%; top:310px;color:black;">
+                <blockquote class="pull-right">
+                    <p>Best restaurant in Vail in my opinion. Great food, and great service. A hidden gem of Lionshead, that is well worth the commute from the other villages to experience.</p>
+                    <small>Brett, about <cite><a href="/venue/thelittlediner">The Litle Diner</a></cite></small>
+                </blockquote>
+            </div>
+        </div>
+        <div class="item">
+            <img style="height:431px;width:100%;" src="/static/img/MTN2.jpg" alt="RateVail Mountain Two">
+            <div class="carousel-caption-inverse">
+                <blockquote class="pull-right">
+                </blockquote>
+            </div>
+        </div>
+        <div class="item">
+            <img style="height:431px;width:100%;" src="/static/img/MTN3.jpg" alt="RateVail Mountain Three">
+            <div class="carousel-caption-inverse">
+            </div>
+        </div>
+    </div><!--end carousel-inner -->
+
+    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+</div> <!-- end carousel -->
+{% endblock %}
+
+{% block content %}
+<div class="row featurette">
+    <div class="col-md-7">
+        <h1 class="featurette-heading">Vail started as someone's idealistic vision,</h1>
+        <p class="lead">driven by a single passion, and went on to become the largest ski resort in Colorado and the United States, and a destination for vacationers all over the world. What started with only one gondola, two ski lifts and a couple of guys destined on creating something truly special, has evolved into an amazingly diverse terrain that has something to offer for everyone. Vail mountain and the subsequent towns of Vail, East and West Vail, and Lionshead were all built with the sole purpose of offering a once and a lifetime experience, and it does just that.</p>
+        <p></p>
+    </div>
+    <div class="col-md-5">
+        <img class="featurette-image img-responsive img-thumbnail" height="400" width="400" src="/static/img/vail_sign.jpg" alt="RateVail Direction Sign"> 
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-10 col-md-offset-2">
+        <h1 class="featurette-index-heading">See what people are saying. Random comments...</h1>
+    </div>
+</div>
+<div class="row">
+    {% for comment in rand_comments %}
+    <div class="col-md-4">
+        <div class="commentbox {% if comment['ratingval'] < 3 %}bad{%else%}good{%endif%}">
+            <div class="commentbox-header">
+                {{ comment['venuename'] }}
+            </div>
+            <div class="commentbox-rating">
+                {% for r in comment['num_full_stars'] %}
+                <span class="glyphicon glyphicon-star"></span>
+                {% endfor %}
+                {% for r in comment['num_empty_stars'] %}
+                <span class="glyphicon glyphicon-star-empty"></span>
+                {% endfor %}
+            </div>
+            <hr>
+            <p>{{ comment['text'] }}{% if comment['readMoreLink'] %}<a href="{{ comment['readMoreLink'] }}">Read More{% endif %}</a></p>
+            <small>{% if comment['userfname'] %}{{ comment['userfname'] }}{% else %}Anonymous{%endif%} about <cite><a href="/venue/{{comment['venueshortname']}}">{{comment['venuename']}}</a></cite></small>
+        </div>
+    </div><!-- End col -->
+    {% endfor %}
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-10 col-md-offset-2">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- IndexBottom -->
+        <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-6587813102165390"
+         data-ad-slot="7101436465"></ins>
+         <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+         </script>
+    </div>
+</div>
+{% endblock %}

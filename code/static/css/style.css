@@ -1,0 +1,357 @@
+body {
+    padding-top: 76px;
+    background-color: #313640;
+}
+
+/*
+   Main Menu
+*/
+.ratevail-top-navbar {
+    margin-top: 10px;
+}
+
+.ratevail-top-navbar-logo {
+}
+
+.venue-well-white {
+  min-height: 20px;
+  padding: 19px;
+  border-radius: 4px;
+}
+.venue-well-white:hover {
+    background-color: #D8E0E3;
+}
+
+.venue-well-sponsored {
+    margin-left: 60%;
+}
+
+.venue-profile-contact-phone {
+    font-size: 15px;
+    margin-top: 8px;
+}
+
+.venue-profile {
+}
+
+.dropdown {
+    padding-bottom: 4px;
+    border-bottom-width: 2px;
+    border-bottom-color: transparent;
+    border-bottom-style:solid;
+}
+.dropdown:hover {
+    border-bottom-width: 2px;
+    border-bottom-color:#00B4FF;
+    border-bottom-style:solid;
+}
+
+.venue-profile-desc {
+    border-right-width: 3px;
+    border-right-style: solid;
+    border-right-color: #515151;
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
+.venue-profile-error {
+    margin-top: 5px;
+}
+
+.venue-profile h1 {
+    font-size:32px;
+    margin-bottom:25px;
+}
+
+.venue-profile img {
+width: 200px;
+height: 200px;
+margin-left:auto;
+margin-right:auto;
+margin-top: 20px;
+display: block;
+}
+
+.venue-profile hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.venue-profile address {
+    margin-top: 3px;
+    margin-left: 34px;
+    font-size: 13px;
+}
+
+.venue-comment-box {
+  min-height: 20px;
+  padding: 19px;
+  border-radius: 4px;
+}
+
+.venue-comment-box-errmsg {
+    margin-left: 12px;
+}
+
+.venue-comment-box b {
+    margin-left: 8px;
+}
+
+.venue-comment {
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.venue-comment hr {
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+.venue-user-rating {
+    margin-left: 55px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.venue-user-rating-date {
+    float: right;
+}
+
+.venue-comment p {
+    margin-left: 55px;
+    margin-right: 10px;
+    width: 520px;
+    word-wrap: break-word;
+}
+
+#thumbs-up {
+    margin-right:5px;
+}
+
+/* 
+   Featurette
+*/
+
+.featurette {
+    margin-top: 30px;
+    margin-left: 10px;
+}
+.featurette-quotes {
+    margin-top: 30px;
+}
+/* Thin out the marketing headings */
+.featurette-heading {
+    font-weight: 100;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.featurette p {
+    font-size: 21px;
+    font-weight: 100;
+    line-height: 1.3;
+    letter-spacing: 1px;
+}
+
+.featurette-index-heading {
+    font-weight: 100;
+    line-height: 2;
+    letter-spacing: -1px;
+}
+
+.featurette-heading span {
+    font-size: 27px;
+}
+
+.featurette-divider {
+    margin: 50px 0; /* Space out the Bootstrap <hr> more */
+}
+
+
+/*
+   Footer
+*/
+footer {
+    padding: 20px 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+footer hr {
+    margin-bottom: 8px;
+}
+
+footer ul {
+    position: absolute;
+    left: 35%;
+}
+
+footer li {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+footer a:hover {
+    text-decoration: none;
+}
+
+/* 
+   Carousel
+*/
+.carousel-caption-inverse {
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: 20px;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #000000;
+    text-align: center;
+}
+
+.carousel-img {
+    height: 401px;
+    width: 100%;
+}
+
+/*
+   Vail Profile
+*/
+.vail-profile {
+    margin-top: 15px;
+}
+
+
+/*
+   Venue Search Box
+*/
+
+.search-result {
+ height: 130px;
+}
+
+.search-result:hover{
+    border-right-width: 3px;
+    border-right-style: solid;
+    border-right-color: #00B4FF;
+}
+
+.search-result img {
+    float: left;
+    margin-right: 15px;
+    height: 110px;
+    width: 110px;
+}
+
+.search-result-body {
+    display: inline;
+    float: left;
+    position: relative;
+    height: 100%;
+}
+
+.search-result-body h3 {
+    margin: 0px 5px 10px 5px;
+       
+}
+
+.search-result-stars {
+    margin-left: 15px;
+}
+
+.search-result-price {
+    margin-left: 15px;
+}
+
+.search-result-outof {
+    font-size: 12px;
+    padding-bottom: 3px;
+}
+
+.search-result-phone {
+    position: absolute;
+    bottom: 0;
+}
+
+a.list-group-item.active {
+    background-color: #00B4FF;
+    border-color: #00B4FF;
+}
+
+a.list-group-item.active:hover {
+    background-color: #00B4FF;
+    border-color: #00B4FF;
+}
+
+.container-main {
+    background-color: white;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+    border-radius: 20px;
+    padding-bottom: 50px;
+}
+
+.carousel-index {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+#venuetab span {
+    margin-left:5px;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+.commentbox {
+    /*background-color: #f8f8f8;*/
+    border-style:solid;
+    border-width:1px;
+    border-color:#E6E7E8;
+    height:260px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    padding: 20px;
+
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.commentbox.bad {
+     -webkit-box-shadow: 10px 10px 15px -6px rgba(255, 0,0,0.15);
+     -moz-box-shadow: 10px 10px 15px -6px rgba(255,0,0,0.15);
+     box-shadow: 10px 10px 15px -6px rgba(255,0,0,0.15);
+}
+
+.commentbox.good {
+     -webkit-box-shadow: 10px 10px 15px -6px rgba(0, 180, 255,0.22);
+     -moz-box-shadow: 10px 10px 15px -6px rgba(0, 180, 255,0.22);
+     box-shadow: 10px 10px 15px -6px rgba(0, 180, 255,0.22);
+}
+
+.commentbox hr {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.commentbox small {
+    float: right;
+}
+
+.commentbox-rating {
+    margin-left: 3px;
+}
+
+.commentbox-header {
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 1.4;
+
+}

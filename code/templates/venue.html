@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+{{ venue_profile['venuename'] }}
+{% block sitedesc %}{{ venue_profile['description'] }}{% endblock %}
+{% endblock %}
+
+{% block content %}
+
+{% if venue_profile %}
+<div class="row venue-profile">
+    <div class="col-md-3">
+        <img class="img-thumbnail venue-profile-img" src="/static/img/{{ venue_profile['imgloc'] }}" title="{{ venue_profile['imgtitle'] }}">
+        <address>
+            <strong>{{ venue_profile['venuename'] }}</strong><br>
+            {% for addr in venue_profile['addrs'] %}
+            {% if addr['addrtypcd'] == "PHYS" %}
+            {{ addr['addrline1'] }}<br>
+            {% if addr['addrline2'] %}
+            {{ addr['addrline2'] }}<br>
+            {% endif %}
+            {{ addr['city'] }}, {{ addr['state'] }} {{ addr['zip'] }}<br>
+            {% endif %}
+            {% endfor %}
+            <div class="venue-profile-contact-phone">
+                <span class="glyphicon glyphicon-earphone"></span> {{ venue_profile['phone'] }}<br>
+            </div>
+        </address>
+    </div>
+    <div class="col-md-7">
+        <h1>{{ venue_profile['venuename'] }} <small>{% if venue_profile['slogan'] %}{{ venue_profile['slogan'] }}{% endif %}</small></h1>
+        <div class="tab-content">
+            <div class="row">
+                <div class="col-md-5">
+                    <ul id="venuetab" class="nav nav-tabs">
+                        <li class="active"><a id="ratevail-tab" href="#ratevail" data-toggle="tab">RateVail <span class="label label-success">{{venue_comments|length}}</span></a></li>
+                        <li><a id="google-tab" href="#google" data-toggle="tab">Google <span class="label label-success">{{  google_venue_comments|length }}</span></a></li>
+                        <!--li><a id="yelp-tab" href="#yelp" data-toggle="tab">Yelp</a></li-->
+                    </ul>
+                    <div class="tab-content">
+                            <div class="tab-pane active" id="ratevail">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Rating</b></td>
+                                            <td>
+                                                {% for star in venue_profile['full_stars'] %}
+                                                <span class="glyphicon glyphicon-star"></span>
+                                                {% endfor %}
+                                                {% for star in venue_profile['empty_stars'] %}
+                                                <span class="glyphicon glyphicon-star-empty"></span>
+                                                {% endfor %}
+                                                {% if venue_profile['numuserratings'] == 1 %}
+                                                <small> {{ venue_profile['numuserratings'] }} rating</small>
+                                                {% else %}
+                                                <small> {{ venue_profile['numuserratings'] }} ratings</small>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Price</b></td>
+                                            <td>
+                                                {% for num in venue_profile['pricepoint'] %}
+                                                <span class="glyphicon glyphicon-usd"></span>
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Hours</b></td>
+                                            <td>{{ venue_profile['hours'] }}</td>
+                                        </tr>
+                                    </tbody> 
+                                </table>
+                            </div>
+                        <div class="tab-pane" id="google">
+                            {% if google_venue_profile %}
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Rating</b></td>
+                                        <td>
+                                            {% for star in google_venue_profile['full_stars'] %}
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            {% endfor %}
+                                            {% for star in google_venue_profile['empty_stars'] %}
+                                            <span class="glyphicon glyphicon-star-empty"></span>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Price</b></td>
+                                        <td>
+                                            {% for num in venue_profile['pricepoint'] %}
+                                            <span class="glyphicon glyphicon-usd"></span>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                </tbody> 
+                            </table>
+                            {% else %}
+                            <div class="alert alert-warning venue-profile-error">
+                                <p>No ratings available for this venue.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane" id="yelp">
+                            {% if yelp_venue_profile %}
+                            {% else %}
+                            <div class="alert alert-warning venue-profile-error">
+                                <p>No ratings available for this venue.</p>
+                            </div>
+                            {% endif %}
+                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <p class="lead venue-profile-desc">{{ venue_profile['description'] }}</p>
+                </div>
+            </div>
+        </div><!-- End Tab content -->
+        <div class="row">
+            <div class="col-md-12 venue-comment-box">
+                <div class="tab-content">
+                    <div class="tab-pane" id="google">google ccomments</div>
+                </div>
+                <div id="userComment" class="venue-comment">
+                    {% if insert_result %}
+                    <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <b>Success!</b>
+                    </div>
+                    {% elif user_already_rated %}
+                    <div class="alert alert-info">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p><strong>Thank you!</strong> We really appreciate the feedback you've provided</p>
+                    </div>
+                    {% else %}
+                    <form id="user-rating-form" role="form">
+                        <div id="userRating" class="venue-user-rating">
+                            <span id="onestar" value="1" class="glyphicon glyphicon-star-empty"></span>
+                            <span id="twostar" value="2" class="glyphicon glyphicon-star-empty"></span>
+                            <span id="threestar" value="3" class="glyphicon glyphicon-star-empty"></span>
+                            <span id="fourstar"  value="4" class="glyphicon glyphicon-star-empty"></span>
+                            <span id="fivestar" value="5" class="glyphicon glyphicon-star-empty"></span>
+                            <span id="ratingval_errmsg" class="text-danger venue-comment-box-errmsg {% if not ratingval_errmsg %}hidden{% endif %} "><span class="glyphicon glyphicon-chevron-left"></span>Please select a star!</span>
+                            <span class="error">
+                        </div>
+                        <div class="form-group">
+                            <input name="commentFname" type="text" class="form-control" placeholder="Enter First Name (Optional)" style="width:300px; margin-left:51px;display:inline;" value="{{ user_commentFname }}">
+                         </div> 
+                         <div class="form-group">
+                            <textarea name="commentText" class="form-control" row="3" placeholder="Enter Comment (Optional)" style="display:inline-block;margin-left:50px;width:400px">{{ user_commentText }}</textarea>
+                             <button type="button" class="btn btn-primary" style="display:inline-block;margin-left:15px;" onclick="postComment();">Submit</button>
+                         </div>
+                         <input id="ratingval" type="hidden" name="ratingval" value="0">
+                         <input type="hidden" name="venueid" value="{{ venue_profile['venueid'] }}">
+                    </form>
+                    {% endif %}
+                </div>
+                <hr>
+                <div id="ratevail-comments">
+                    <div id="new-comment" class="fade">
+                    </div>
+                    {% if venue_comments|length == 0 %}
+                    <div class="alert alert-info">
+                        <p>Be the first to rate this place!</p>
+                    </div>
+                    {% endif %}
+                    {% for comment in venue_comments %}
+                    <div class="venue-comment">
+                        <span id="likecnt-commentid-{{ comment['commentid'] }}">{{ comment['totallikecount'] }}</span>
+                        {% if comment['userliked'] %}
+                        <span id="like-commentid-{{ comment['commentid'] }}" class="glyphicon glyphicon-thumbs-up" set="true" style="color:#3c763d;"></span>
+                        {% else %}
+                        <span id="like-commentid-{{ comment['commentid'] }}" class="glyphicon glyphicon-thumbs-up" set="false"></span>
+                        {% endif %}
+                        {% if comment['userdisliked'] %}
+                        <span id="dislike-commentid-{{ comment['commentid'] }}" class="glyphicon glyphicon-thumbs-down" set="true" style="color:#a94442;"></span>
+                        {% else %}
+                        <span id="dislike-commentid-{{ comment['commentid'] }}" class="glyphicon glyphicon-thumbs-down" set="false"></span>
+                        {% endif %}
+                        <b>{{ comment['userfname'] }}</b>
+                        <span class="venue-user-rating-date">{{ comment['createdate'] }}</span>
+                        <div class="venue-user-rating {% if comment['ratingval'] < 3 %}text-danger{% else %}text-success{% endif %}">
+                            {% for star in comment['full_stars'] %}
+                            <span class="glyphicon glyphicon-star"></span>
+                            {% endfor %}
+                            {% for star in comment['empty_stars'] %}
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            {% endfor %}
+                        </div>
+                        <p>{{ comment['text'] }}</p>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+                <div id="google-comments" hidden>
+                    {% if google_venue_comments %}
+                    <div class="venue-comment">
+                        {% for comment in google_venue_comments %}
+                        <div class="venue-user-rating {% if comment['ratingval'] < 3 %}text-danger{% else %}text-success{% endif %}">
+                            {% for star in comment['full_stars'] %}
+                            <span class="glyphicon glyphicon-star"></span>
+                            {% endfor %}
+                            {% for star in comment['empty_stars'] %}
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            {% endfor %}
+                        </div>
+                        <p>{{ comment['comment'] }}</p>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    {% else %}
+                    <div class="alert alert-warning venue-profile-error">
+                        <strong>Something went wrong.</strong> We were unable to load Google comments for this venue.
+                    </div>
+                    {% endif %}
+                </div>
+                <div id="yelp-comments" hidden>
+                    {% if yelp_venue_comments %}
+                    {% else %}
+                    <div class="alert alert-warning venue-profile-error">
+                        <strong>Something went wrong.</strong> We were unable to load Yelp comments for this venue.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- End Venue Profile -->
+{% endif %}
+
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+<script src="/static/js/rv.venue.js"></script>
+{% endblock %}

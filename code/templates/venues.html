@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Vail Venues By Type{% endblock %}
+
+{% block content %}
+{% if grouped_venue_types %}
+{% for group in grouped_venue_types %}
+<div class="row">
+    {% for venue in group %}
+    <div class="col-md-3 venue-well-white">
+        <a href="/venues/{{ venue['name'] }}"><img class="img-thumbnail" src="/static/img/{{ venue['imgloc'] }}" style="width: 180px; height: 170px; margin-left:auto; margin-right: auto; display: block;"></a>
+        <h2 class="text-center">{{ venue['displayname'] }}</h2>
+    </div>
+    {% endfor %}
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-10 col-md-offset-2">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- VenuesTypeBottom -->
+        <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-6587813102165390"
+         data-ad-slot="1603745664"></ins>
+         <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+         </script>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="row">
+    {% if venues %}
+    <div class="col-md-2">
+        <hr>
+        <h3>{{ active_venue_type['displayname'] }}</h3>
+        <div class="list-group">
+            {% if venue_sub_items %}
+            {% for item in venue_sub_items %}
+            <a href="/venues/{{ item['name'] }}" class="list-group-item {% if active_venue_type['name'] == item['name'] %}active{% endif %}">{{ item['displayname'] }}</a>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <hr>
+        <div class="small-ad">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Venues -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:160px;height:600px"
+                 data-ad-client="ca-pub-6587813102165390"
+                 data-ad-slot="2908048465"></ins>
+            <script>
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <hr>
+        <div class="list-group">
+            {% for venue in venues %}
+            <a href="/venue/{{ venue['shortname'] }}" class="list-group-item search-result">
+                <img class="img-thumbnail" src="/static/img/{{ venue['imgloc'] }}">
+                <div class="search-result-body">
+                    <h3 class="list-group-item-heading">{{ venue['venuename'] }}</h3>
+                    <div class="search-result-stars">
+                        {% for star in venue['full_stars'] %}
+                        <span class="glyphicon glyphicon-star"></span>
+                        {% endfor %}
+                        {% for star in venue['empty_stars'] %}
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                        {% endfor %}
+                        {% if venue['commentcnt'] == 1 %}
+                        <span class="search-result-outof"> {{ venue['commentcnt'] }} review</span>
+                        {% else %}
+                        <span class="search-result-outof"> {{ venue['commentcnt'] }} reviews</span>
+                        {% endif %}
+                    </div>
+                    <div class="search-result-price">
+                        {% for dollar in venue['pricepoint'] %}
+                        <span class="glyphicon glyphicon-usd"></span>
+                        {% endfor %}
+                    </div>
+                    <span class="search-result-phone"><span class="glyphicon glyphicon-earphone"></span> {{ venue['phone'] }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif not grouped_venue_types %}
+    <div class="col-md-6 col-md-offset-3">
+        <div class="alert alert-info">
+            <strong>Nothing here yet.</strong> Check back in a little while and hopefully we've added some content.  Please feel free to suggest something by <a href="/contact">contacting us</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+

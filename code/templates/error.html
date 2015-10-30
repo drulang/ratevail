@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+
+{% block content%}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="alert alert-warning">
+            {% if errmsg %}
+            {{ errmsg }}
+            {% else %}
+            <strong>Hmmm...</strong> Sorry you're looking at this page. Chances are we're trying to fix the problem
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

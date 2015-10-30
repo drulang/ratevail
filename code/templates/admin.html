@@ -1,0 +1,234 @@
+{% extends "adminbase.html" %}
+{% block title %}VailAdmin{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% if session['loggedin'] %} 
+    <div class="col-md-3">
+        <h3>Venues</h3>
+        <select id="venues" multiple class="form-control" style="height:400px;" onchange="loadVenueProfile();">
+            <option>Loading...</option>
+        </select>
+    </div>
+    <div class="col-md-8 col-md-offset-1">
+        <h3 id="venuename">Venue Profile</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <b>Description</b>
+                <textarea id="venuedescription" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <b>Venue Types</b>
+                <select id="venuetypes" multiple class="form-control" style="height:200px;">
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="arrows" style="margin-top: 50px;">
+                    <button style="width:35px;height:30px" onclick="addVenueTypes();">
+                        <span class="glyphicon glyphicon-chevron-left" style="float:left;"></span>
+                    </button>
+                    <button style="width:35px;height:30px;float:right;" onclick="removeVenueTypes();">
+                        <span class="glyphicon glyphicon-chevron-right" style="float:right;"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <b>Available Venue Types</b>
+                <select id="availvenuetypes" class="form-control" >
+                </select>
+            </div>
+            <div class="col-md-3">
+                <b>Don't add these types:</b>
+                <ul>
+                    <li>Dining</li>
+                    <li>Accomedations</li>
+                    <li>Night Life</li>
+                    <li>Stores</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="from-group">
+                    <label>Opened From</label>
+                    <input class="form-control" type="text" id="fromhours">
+                    <label>To</label>
+                    <input class="form-control" type="text" id="tohours">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="form-group">
+                <label>Image Name</label>
+                <input class="form-control" type="text" id="imgname">
+                <label>Image Title</label>
+                <input class="form-control" type="text" id="imgtitle">
+            </div>
+                <button class="btn btn-primary" onclick="updateVenue();">Submit</button><span id="updateStatus" style="margin-left:20px;"></span>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-5 col-md-offset-1">
+        <form class="form" method="POST" action="/coffee">
+            <input name="username" type="text">
+            <input name="password" type="password">
+            <button type="submit" value="Submit">Submit</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block js %}
+{% if session['loggedin'] %}
+{{ super() }}
+<script type="text/javascript">
+
+var vtypes = [];
+
+function getVenueName(venuetypcd) {
+    for(i = 0; i < vtypes.length; i++) {
+        if(vtypes[i]['venuetypcd'] == venuetypcd) {
+            return vtypes[i]['displayname'];
+        }
+    }
+};
+
+$(document).ready(function() {
+        console.log("Getting Venue Types");
+        jQuery.getJSON("/v1/venuetyp", function(data) {
+                vtypes=data;
+                var select = document.getElementById("availvenuetypes");
+                for(i = 0; i < data.length; i++) {
+                    select.add(new Option(data[i]['displayname'], data[i]['venuetypcd']));
+
+                }
+            });
+
+        jQuery.getJSON("/v1/venue", function(data) {
+                var venues = document.getElementById("venues");
+                venues.options.length = 0;
+                for(i = 0; i < data.length; i++) {
+                    venues.add(new Option(data[i]['venuename'], data[i]['venueid']));
+                }
+            });
+        });
+function updateVenue() {
+    var description = document.getElementById("venuedescription").value;
+    var imgname = document.getElementById("imgname").value;
+    var imgtitle = document.getElementById("imgtitle").value;
+    var venuetypes = document.getElementById("venuetypes");
+    //Hours
+    var hours = null;
+    var fromhours = document.getElementById("fromhours");
+    var tohours = document.getElementById("tohours");
+    if(fromhours.value != "") {
+        hours = fromhours.value + " - " + tohours.value;
+        console.log("Hours: " + hours); 
+    }
+    var venuetypstr = "";
+
+    for(i = 0; i < venuetypes.options.length; i++) {
+        venuetypstr += venuetypes.options[i].value + ",";
+    }
+
+    if(venuetypstr.slice(-1) ==  ",") {
+        venuetypstr = venuetypstr.substring(0, venuetypstr.length - 1);
+    }
+
+    var venues = document.getElementById("venues");
+    var idx = venues.selectedIndex;
+    var venueid = venues.options[idx].value;
+    
+    if(hours != null){
+        console.log("Submitting with hours");
+        var data = $.param({"description":description,"imgname":imgname,"imgtitle":imgtitle,"venuetypes":venuetypstr,"hours":hours});
+    } else {
+        var data = $.param({"description":description,"imgname":imgname,"imgtitle":imgtitle,"venuetypes":venuetypstr});
+    }
+    $.ajax({
+             url:'/v1/venue/' + venueid,
+             type:"PUT",
+             processData:false,
+             data:data,
+             success: function (data) {
+                var stat = jQuery.parseJSON(data)
+                if(stat['status'] == "OK") {
+                    $("#updateStatus").text("Success");
+                    $("#updateStatus").addClass("text-success");
+                    $("#updateStatus").removeClass("text-danger");
+                } else {
+                    $("#updateStatus").addClass("text-danger");
+                    $("#updateStatus").removeClass("text-success");
+                    $("#updateStatus").text("Error. See Dru.  " + stat['errmsg']);
+                }
+             }
+           });
+};
+
+function addVenueTypes() {
+    var availVenueType = document.getElementById("availvenuetypes");
+    var venueType = document.getElementById("venuetypes");
+
+    for(i = 0; i < availVenueType.selectedOptions.length; i++) {
+        var ele = availVenueType.selectedOptions[i];
+        venueType.options.add(ele);    
+    }
+}
+
+function removeVenueTypes() {
+    console.log("Removing veneu types");
+    var availVenueType = document.getElementById("availvenuetypes");
+    var venueType = document.getElementById("venuetypes");
+
+    for(i = 0; i < venueType.selectedOptions.length; i++) {
+        console.log("Removing");
+        var ele = venueType.selectedOptions[i];
+        availVenueType.options.add(ele);    
+    }
+}
+
+function loadVenueProfile() {
+    $("#updateStatus").text("");
+    var venues = document.getElementById("venues");
+    var idx = venues.selectedIndex;
+    if(idx >= 0) {
+        var venueid = venues.options[idx].value;
+        jQuery.getJSON("/v1/venue/" + venueid, function(data) {
+                document.getElementById("venuename").innerText = data['venuename'];
+                $("textarea#venuedescription").val(data['description']);
+                document.getElementById("imgtitle").value = data['imgtitle'];
+
+                //Hours
+                if(data['hours'] != null) {
+                    var hourParts = data['hours'].split("-");
+                    document.getElementById("fromhours").value = $.trim(hourParts[0]);
+                    document.getElementById("tohours").value = $.trim(hourParts[1]);
+                } else {
+                    document.getElementById("fromhours").value = '';
+                    document.getElementById("tohours").value = '';
+                }
+
+                var imgParts = data['imgloc'].split("/");
+                document.getElementById("imgname").value = imgParts[imgParts.length - 1];
+
+                venuetypes.options.length = 0;
+
+                for(j = 0; j < data['venuetypcds'].length; j++) {
+                    var venuetyp = data['venuetypcds'][j];
+                    var venuetypcd = venuetyp['venuetypcd'];
+                    venuetypes.options.add(new Option(getVenueName(venuetypcd), venuetypcd));
+                }
+            });
+    }
+}
+
+</script>
+{% endif %}
+{% endblock %}
+
